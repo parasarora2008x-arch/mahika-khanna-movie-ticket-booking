@@ -1,0 +1,620 @@
+import puppeteer from 'puppeteer-core';
+import path from 'path';
+import fs from 'fs';
+
+const chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+
+const shieldPath = path.resolve('snapshots', 'poornima_shield.png').replace(/\\/g, '/');
+const useCasePath = path.resolve('snapshots', 'figure_3_1_usecase.png').replace(/\\/g, '/');
+
+const fig1 = path.resolve('snapshots', 'swing_fig_5_1_login.png').replace(/\\/g, '/');
+const fig2 = path.resolve('snapshots', 'swing_fig_5_2_dashboard.png').replace(/\\/g, '/');
+const fig3 = path.resolve('snapshots', 'swing_fig_5_3_movies_jtable.png').replace(/\\/g, '/');
+const fig4 = path.resolve('snapshots', 'swing_fig_5_4_add_movie.png').replace(/\\/g, '/');
+const fig5 = path.resolve('snapshots', 'swing_fig_5_5_update_delete.png').replace(/\\/g, '/');
+const fig6 = path.resolve('snapshots', 'swing_fig_5_6_search.png').replace(/\\/g, '/');
+const fig7 = path.resolve('snapshots', 'swing_fig_5_7_customers.png').replace(/\\/g, '/');
+const fig8 = path.resolve('snapshots', 'swing_fig_5_8_bookings.png').replace(/\\/g, '/');
+const fig9 = path.resolve('snapshots', 'swing_fig_5_9_change_password.png').replace(/\\/g, '/');
+const fig10 = path.resolve('snapshots', 'swing_fig_5_10_user_role.png').replace(/\\/g, '/');
+
+const reportHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Software Requirement Specification - Movie Ticket Booking Management System</title>
+<style>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Times New Roman", Times, serif;
+  }
+  body {
+    background: #ffffff;
+    color: #000000;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 24mm 22mm 20mm 22mm;
+    position: relative;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #ffffff;
+  }
+
+  /* Cover Page Border */
+  .cover-page {
+    padding: 16mm 14mm;
+  }
+  .cover-border {
+    border: 1.8px solid #000000;
+    width: 100%;
+    height: 100%;
+    padding: 24mm 16mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+  }
+
+  .chapter-header {
+    text-align: right;
+    font-size: 14pt;
+    font-weight: bold;
+    margin-bottom: 22px;
+  }
+
+  .page-footer {
+    text-align: center;
+    font-size: 10pt;
+    color: #000000;
+    padding-top: 10px;
+  }
+
+  .content {
+    flex-grow: 1;
+    font-size: 10pt;
+    line-height: 1.35;
+    text-align: left;
+  }
+
+  h2 {
+    font-size: 11pt;
+    font-weight: bold;
+    margin: 14px 0 6px 0;
+  }
+
+  p {
+    font-size: 10pt;
+    line-height: 1.35;
+    margin-bottom: 8px;
+    text-align: justify;
+  }
+
+  ul {
+    margin-left: 20px;
+    margin-bottom: 12px;
+  }
+  li {
+    font-size: 10pt;
+    line-height: 1.35;
+    margin-bottom: 3px;
+  }
+
+  /* Tables matching reference report */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px 0;
+    font-size: 9.5pt;
+  }
+  th {
+    background: #d1d5db;
+    border: 1px solid #4b5563;
+    padding: 6px 8px;
+    text-align: left;
+    font-weight: bold;
+    color: #000000;
+  }
+  td {
+    border: 1px solid #4b5563;
+    padding: 5px 8px;
+    vertical-align: top;
+    color: #000000;
+  }
+
+  .figure-box {
+    text-align: center;
+    margin: 12px 0 24px 0;
+  }
+  .figure-img {
+    max-width: 90%;
+    height: auto;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  .figure-caption {
+    font-size: 9.5pt;
+    font-style: italic;
+    font-weight: bold;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ==================== PAGE 1: TITLE PAGE ==================== -->
+  <div class="page cover-page">
+    <div class="cover-border">
+      <div>
+        <p style="font-size: 14pt; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 14px;">A</p>
+        <p style="font-size: 13.5pt; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 14px;">SOFTWARE REQUIREMENT SPECIFICATION</p>
+        <p style="font-size: 12pt; font-weight: bold; margin-bottom: 14px;">ON</p>
+        <p style="font-size: 14pt; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 14px;">MOVIE TICKET BOOKING MANAGEMENT SYSTEM</p>
+        <p style="font-size: 11pt; font-weight: bold; margin-bottom: 14px;">UNDER</p>
+        <p style="font-size: 12.5pt; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 25px;">MINI PROJECT LAB (NON-SYLLABUS PROJECT)</p>
+      </div>
+
+      <div style="margin: 20px 0;">
+        <img src="file://${shieldPath}" alt="Poornima Institute Logo" style="height: 125px; object-fit: contain;">
+      </div>
+
+      <div style="display: flex; justify-content: space-between; text-align: left; margin: 30px 10px 40px 10px; font-size: 11pt;">
+        <div>
+          <p style="font-weight: bold; margin-bottom: 4px;">Submitted To:</p>
+          <p style="font-weight: bold; font-size: 11pt;">Dr. Shikha Gautam</p>
+          <p style="font-weight: bold; color: #1f2937;">Assistant Professor</p>
+        </div>
+        <div style="text-align: right;">
+          <p style="font-weight: bold; margin-bottom: 4px;">Submitted By:</p>
+          <p style="font-weight: bold; font-size: 11pt;">Mahika Khanna (PIET25CS089)</p>
+          <p style="font-size: 10.5pt; color: #1f2937;">B.Tech CSE, 2nd Year, 3rd Sem</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 15px;">
+        <p style="font-size: 11.5pt; font-weight: bold; margin-bottom: 4px;">DEPARTMENT OF COMPUTER ENGINEERING</p>
+        <p style="font-size: 11pt; font-weight: bold; margin-bottom: 4px;">POORNIMA INSTITUTE OF ENGINEERING & TECHNOLOGY, JAIPUR</p>
+        <p style="font-size: 10.5pt; margin-top: 8px;">Academic Year (2026-27)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 2: CHAPTER 1 (Page 1) ==================== -->
+  <div class="page">
+    <div class="chapter-header">Chapter 1: Introduction of Project</div>
+    <div class="content">
+      <h2>1.1 Objective of Project</h2>
+      <p>
+        The main purpose of this project is to develop a simple desktop application for managing the movie ticket booking work of a cinema hall or theater. In many local theaters the details of movies, the show schedule, customer reservations and ticket collections are still written in registers or kept in Excel sheets. This takes a lot of time, mistakes can happen easily, and finding the record of a single booking is difficult.
+      </p>
+      <p>
+        The Movie Ticket Booking Management System solves this problem. All the data is stored in a MySQL database and the user works on it through simple Java Swing screens. Using this project the user can:
+      </p>
+      <ul>
+        <li>login securely with a username and password;</li>
+        <li>add, update, delete and search movie records (movie name, genre, duration, language and ticket price);</li>
+        <li>add, update, delete and search customer records (name, mobile and email);</li>
+        <li>book movie tickets for a customer, select show date, show time and seat number, and the total amount is calculated automatically;</li>
+        <li>prevent duplicate seat bookings for the same show;</li>
+        <li>view all the records in a table, cancel a booking, and change his/her own password.</li>
+      </ul>
+
+      <h2 style="margin-top: 24px;">1.2 Types of Users</h2>
+      <p>
+        The system has two types of users. The role of every user is stored in the database and the screens work according to this role.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 20%;">User Type</th>
+            <th style="width: 35%;">Who uses it</th>
+            <th style="width: 45%;">What the user can do</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Admin</strong></td>
+            <td>Theater management / staff in charge</td>
+            <td>Full access. Can add, update, delete, view and search records (movies, customers and bookings), cancel bookings, view total revenue, and change the password.</td>
+          </tr>
+          <tr>
+            <td><strong>User</strong></td>
+            <td>Booking counter clerk / front desk staff</td>
+            <td>Can only view movies, search records, book tickets for customers, view all records and change his/her own password. The Add, Update and Delete buttons for movies are disabled for this user.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="page-footer">1</div>
+  </div>
+
+  <!-- ==================== PAGE 3: CHAPTER 2 (Page 2) ==================== -->
+  <div class="page">
+    <div class="chapter-header">Chapter 2: Requirement Analysis</div>
+    <div class="content">
+      <h2>2.1 Functional Requirement</h2>
+      <p>The following functions are provided by the system.</p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 8%;">No.</th>
+            <th style="width: 32%;">Function</th>
+            <th style="width: 60%;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>Login System</strong></td>
+            <td>The user enters username and password. They are checked in the users table of MySQL and the user enters as Admin or User according to the role.</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><strong>Dashboard</strong></td>
+            <td>Shows the total number of movies, customers, bookings and total revenue and has buttons to open every module.</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><strong>Add Record</strong></td>
+            <td>New movie, customer and booking records are entered in a Swing form and saved in the database after validation.</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>Update Record</strong></td>
+            <td>The user selects a record from the table, changes the details and saves it.</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>Delete Record</strong></td>
+            <td>The selected record is deleted from the database only after the user confirms it.</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><strong>View All Records (JTable)</strong></td>
+            <td>All records are shown in a JTable. The table can be scrolled and sorted by clicking on the column heading.</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><strong>Search Record</strong></td>
+            <td>Movies are searched by name or genre, customers by name or mobile, and bookings by customer name or movie.</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td><strong>MySQL Database Connectivity (JDBC)</strong></td>
+            <td>The Java program is connected with the MySQL database using JDBC to perform all the CRUD operations.</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td><strong>Form Validation</strong></td>
+            <td>Checks that all fields are filled, phone number has 10 digits, duration and ticket price are numbers, date and show time are selected, and duplicate seat booking for the same show is not entered.</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td><strong>Menu Bar and Toolbar</strong></td>
+            <td>The dashboard has a menu bar (File, Manage, Help) and a toolbar. The record screens have a toolbar with Add, Update, Delete, Search, Clear and Close buttons.</td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td><strong>Logout</strong></td>
+            <td>Closes all the open screens and returns to the login screen without closing the application.</td>
+          </tr>
+          <tr>
+            <td>12</td>
+            <td><strong>Password Change</strong></td>
+            <td>The user enters the old password and the new password twice. The old password is checked before the new one is saved.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="page-footer">2</div>
+  </div>
+
+  <!-- ==================== PAGE 4: CHAPTER 2 CONT. (Page 3) ==================== -->
+  <div class="page">
+    <div class="chapter-header" style="visibility: hidden;">Chapter 2: Requirement Analysis</div>
+    <div class="content">
+      <h2>2.2 Technology Used</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 35%;">Component</th>
+            <th style="width: 65%;">Technology</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Programming Language</strong></td>
+            <td>Java (JDK)</td>
+          </tr>
+          <tr>
+            <td><strong>GUI</strong></td>
+            <td>Java Swing (JFrame, JPanel, JLabel, JTextField, JPasswordField, JComboBox, JButton, JTable, JMenuBar, JToolBar, JOptionPane)</td>
+          </tr>
+          <tr>
+            <td><strong>Database</strong></td>
+            <td>MySQL</td>
+          </tr>
+          <tr>
+            <td><strong>Database Tool</strong></td>
+            <td>MySQL Workbench</td>
+          </tr>
+          <tr>
+            <td><strong>Connectivity</strong></td>
+            <td>JDBC with MySQL Connector/J (mysql-connector-j-8.4.0.jar)</td>
+          </tr>
+          <tr>
+            <td><strong>IDE</strong></td>
+            <td>IntelliJ IDEA</td>
+          </tr>
+          <tr>
+            <td><strong>Operating System</strong></td>
+            <td>Windows</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 style="margin-top: 24px;">2.3 Graphical User Interface</h2>
+      <p>The project has the following screens. All of them are made using Java Swing.</p>
+      <ul>
+        <li><strong>Login Page:</strong> has username and password fields with Login and Exit buttons. Wrong or empty input shows a message.</li>
+        <li><strong>Dashboard:</strong> shows the welcome message with the role of the user, four boxes with the total number of movies, customers, bookings and revenue, buttons to open the modules, and a menu bar and toolbar for quick navigation.</li>
+        <li><strong>Movie Page:</strong> form with Movie ID, Name, Genre, Duration, Language and Price, a search box and a JTable showing all movies.</li>
+        <li><strong>Customer Page:</strong> form with Customer ID, Name, Mobile and Email, a search box and a JTable showing all customers.</li>
+        <li><strong>Ticket Booking Page:</strong> form with Customer ID, Movie ID, Number of Tickets, Show Date, Show Time and Seat Number. The total amount is calculated automatically by the program. The JTable shows all booking records with customer name, movie name, seat, and status.</li>
+        <li><strong>Change Password Page:</strong> old password, new password and confirm password fields.</li>
+      </ul>
+      <p>When a row of the table is clicked, its data comes in the form so that it can be updated or deleted.</p>
+    </div>
+    <div class="page-footer">3</div>
+  </div>
+
+  <!-- ==================== PAGE 5: CHAPTER 3 (Page 4) ==================== -->
+  <div class="page">
+    <div class="chapter-header">Chapter 3: Design</div>
+    <div class="content">
+      <h2>3.1 Use Case Diagram</h2>
+      <div class="figure-box" style="margin: 10px 0 16px 0;">
+        <img src="file://${useCasePath}" alt="Use Case Diagram" style="max-height: 250px;" class="figure-img">
+        <div class="figure-caption">Figure 3.1: Use Case Diagram of Movie Ticket Booking Management System</div>
+      </div>
+      <p>
+        There are two actors in the system, Admin and User. Both of them have to login first. The Admin can manage the records of movies, customers and bookings (add, update and delete), view and search them, and also use the dashboard, change password and logout. The User can only open the dashboard, view and search the records, book tickets, change his/her password and logout.
+      </p>
+
+      <h2 style="margin-top: 18px;">3.2 Data Base Tables</h2>
+      <p>The database is named <strong>movie_ticket_db</strong> and has four tables. The tables are shown below.</p>
+      
+      <p style="font-weight: bold; margin-bottom: 2px;">Table 3.1: users (stores the login details)</p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%;">Column</th>
+            <th style="width: 35%;">Data Type</th>
+            <th style="width: 35%;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>user_id</td><td>INT, AUTO_INCREMENT</td><td>Primary key</td></tr>
+          <tr><td>username</td><td>VARCHAR(30)</td><td>Unique, not null</td></tr>
+          <tr><td>password</td><td>VARCHAR(30)</td><td>Not null</td></tr>
+          <tr><td>role</td><td>VARCHAR(10)</td><td>Admin or User</td></tr>
+        </tbody>
+      </table>
+
+      <p style="font-weight: bold; margin-bottom: 2px;">Table 3.2: movies</p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%;">Column</th>
+            <th style="width: 35%;">Data Type</th>
+            <th style="width: 35%;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>movie_id</td><td>INT, AUTO_INCREMENT</td><td>Primary key</td></tr>
+          <tr><td>movie_name</td><td>VARCHAR(50)</td><td>Not null</td></tr>
+          <tr><td>genre</td><td>VARCHAR(30)</td><td>Not null</td></tr>
+          <tr><td>duration</td><td>INT</td><td>Not null</td></tr>
+          <tr><td>language</td><td>VARCHAR(20)</td><td>Not null</td></tr>
+          <tr><td>ticket_price</td><td>DOUBLE</td><td>Not null</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="page-footer">4</div>
+  </div>
+
+  <!-- ==================== PAGE 6: CHAPTER 3 CONT. (Page 5) ==================== -->
+  <div class="page">
+    <div class="chapter-header" style="visibility: hidden;">Chapter 3: Design</div>
+    <div class="content">
+      <p style="font-weight: bold; margin-bottom: 2px;">Table 3.3: customers</p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%;">Column</th>
+            <th style="width: 35%;">Data Type</th>
+            <th style="width: 35%;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>customer_id</td><td>INT, AUTO_INCREMENT</td><td>Primary key</td></tr>
+          <tr><td>customer_name</td><td>VARCHAR(50)</td><td>Not null</td></tr>
+          <tr><td>mobile</td><td>VARCHAR(15)</td><td>Not null</td></tr>
+          <tr><td>email</td><td>VARCHAR(50)</td><td>Not null</td></tr>
+        </tbody>
+      </table>
+
+      <p style="font-weight: bold; margin-top: 14px; margin-bottom: 2px;">Table 3.4: bookings</p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%;">Column</th>
+            <th style="width: 35%;">Data Type</th>
+            <th style="width: 35%;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>booking_id</td><td>INT, AUTO_INCREMENT</td><td>Primary key</td></tr>
+          <tr><td>customer_id</td><td>INT</td><td>Foreign key of customers(customer_id)</td></tr>
+          <tr><td>movie_id</td><td>INT</td><td>Foreign key of movies(movie_id)</td></tr>
+          <tr><td>number_of_tickets</td><td>INT</td><td>Not null</td></tr>
+          <tr><td>ticket_price</td><td>DOUBLE</td><td>Not null</td></tr>
+          <tr><td>total_amount</td><td>DOUBLE</td><td>Calculated by the program (tickets * price)</td></tr>
+          <tr><td>booking_date</td><td>DATE</td><td>Not null</td></tr>
+          <tr><td>show_time</td><td>VARCHAR(20)</td><td>Not null</td></tr>
+          <tr><td>seat_number</td><td>VARCHAR(20)</td><td>Not null</td></tr>
+          <tr><td>booking_status</td><td>VARCHAR(15)</td><td>Confirmed or Cancelled</td></tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top: 18px; text-align: justify;">
+        <strong>Relationship:</strong> One customer can have many bookings and one movie can also have many bookings. So the bookings table is connected with the customers and movies tables using the foreign keys customer_id and movie_id (ON DELETE RESTRICT, ON UPDATE CASCADE). The combination (movie_id, booking_date, show_time, seat_number) is checked by the application so that the same seat cannot be booked twice for the same movie show.
+      </p>
+    </div>
+    <div class="page-footer">5</div>
+  </div>
+
+  <!-- ==================== PAGE 7: CHAPTER 4 (Page 6) ==================== -->
+  <div class="page">
+    <div class="chapter-header">Chapter 4: Conclusion</div>
+    <div class="content">
+      <p>
+        In this project a Movie Ticket Booking Management System was developed using Java Swing, JDBC and MySQL. The project has a login system with two roles, a dashboard, and separate screens for movies, customers and bookings. All the common modules given for the minor project were completed: Add, Update, Delete, View all records in JTable, Search, form validation, menu bar and toolbar, logout and password change.
+      </p>
+      <p style="margin-top: 14px;">
+        Through this project I learned how to design GUI screens with Swing, how to create tables in MySQL, how to connect a Java program with a database using JDBC and PreparedStatement, and how to handle wrong input and exceptions so that the program does not stop suddenly.
+      </p>
+      <p style="margin-top: 14px;">
+        The project works as a small but complete application and the records are now stored safely in a database instead of registers. In future the project can be improved by:
+      </p>
+      <ul>
+        <li>storing the passwords in encrypted form;</li>
+        <li>printing the ticket receipt / confirmation slip for the customer;</li>
+        <li>adding a visual seat layout map showing available and booked seats;</li>
+        <li>adding an online payment gateway (UPI/card) module.</li>
+      </ul>
+    </div>
+    <div class="page-footer">6</div>
+  </div>
+
+  <!-- ==================== PAGE 8: CHAPTER 5 (Page 7) ==================== -->
+  <div class="page">
+    <div class="chapter-header">Chapter 5: Snapshots of Your Project</div>
+    <div class="content">
+      <div class="figure-box" style="margin-top: 10px;">
+        <img src="file://${fig1}" alt="Figure 5.1" style="max-height: 200px;" class="figure-img">
+        <div class="figure-caption">Figure 5.1: Login Page</div>
+      </div>
+      <div class="figure-box" style="margin-top: 30px;">
+        <img src="file://${fig2}" alt="Figure 5.2" style="max-height: 200px;" class="figure-img">
+        <div class="figure-caption">Figure 5.2: Home / Dashboard</div>
+      </div>
+    </div>
+    <div class="page-footer">7</div>
+  </div>
+
+  <!-- ==================== PAGE 9: CHAPTER 5 CONT. (Page 8) ==================== -->
+  <div class="page">
+    <div class="chapter-header" style="visibility: hidden;">Chapter 5: Snapshots of Your Project</div>
+    <div class="content">
+      <div class="figure-box" style="margin-top: 10px;">
+        <img src="file://${fig3}" alt="Figure 5.3" style="max-height: 200px;" class="figure-img">
+        <div class="figure-caption">Figure 5.3: Movie Page showing all records in JTable</div>
+      </div>
+      <div class="figure-box" style="margin-top: 30px;">
+        <img src="file://${fig4}" alt="Figure 5.4" style="max-height: 200px;" class="figure-img">
+        <div class="figure-caption">Figure 5.4: Add Movie (Registration) Page</div>
+      </div>
+    </div>
+    <div class="page-footer">8</div>
+  </div>
+
+  <!-- ==================== PAGE 10: CHAPTER 5 CONT. (Page 9) ==================== -->
+  <div class="page">
+    <div class="chapter-header" style="visibility: hidden;">Chapter 5: Snapshots of Your Project</div>
+    <div class="content">
+      <div class="figure-box" style="margin-top: 10px;">
+        <img src="file://${fig5}" alt="Figure 5.5" style="max-height: 200px;" class="figure-img">
+        <div class="figure-caption">Figure 5.5: Update / Delete Movie Page (record selected from table)</div>
+      </div>
+      <div class="figure-box" style="margin-top: 30px;">
+        <img src="file://${fig6}" alt="Figure 5.6" style="max-height: 200px;" class="figure-img">
+        <div class="figure-caption">Figure 5.6: Search Page (searching movie by name)</div>
+      </div>
+    </div>
+    <div class="page-footer">9</div>
+  </div>
+
+  <!-- ==================== PAGE 11: CHAPTER 5 CONT. (Page 10) ==================== -->
+  <div class="page">
+    <div class="chapter-header" style="visibility: hidden;">Chapter 5: Snapshots of Your Project</div>
+    <div class="content">
+      <div class="figure-box" style="margin-top: 10px;">
+        <img src="file://${fig7}" alt="Figure 5.7" style="max-height: 200px;" class="figure-img">
+        <div class="figure-caption">Figure 5.7: Customer Records Page</div>
+      </div>
+      <div class="figure-box" style="margin-top: 30px;">
+        <img src="file://${fig8}" alt="Figure 5.8" style="max-height: 200px;" class="figure-img">
+        <div class="figure-caption">Figure 5.8: Ticket Booking Page</div>
+      </div>
+    </div>
+    <div class="page-footer">10</div>
+  </div>
+
+  <!-- ==================== PAGE 12: CHAPTER 5 CONT. (Page 11) ==================== -->
+  <div class="page">
+    <div class="chapter-header" style="visibility: hidden;">Chapter 5: Snapshots of Your Project</div>
+    <div class="content">
+      <div class="figure-box" style="margin-top: 10px;">
+        <img src="file://${fig9}" alt="Figure 5.9" style="max-height: 200px;" class="figure-img">
+        <div class="figure-caption">Figure 5.9: Change Password Page</div>
+      </div>
+      <div class="figure-box" style="margin-top: 30px;">
+        <img src="file://${fig10}" alt="Figure 5.10" style="max-height: 200px;" class="figure-img">
+        <div class="figure-caption">Figure 5.10: Movie Page for the User role (Add, Update and Delete buttons disabled)</div>
+      </div>
+    </div>
+    <div class="page-footer">11</div>
+  </div>
+
+</body>
+</html>
+`;
+
+fs.writeFileSync('PROJECT_REPORT_SRS.html', reportHtml, 'utf-8');
+
+async function exportPdf() {
+  console.log('Launching Puppeteer to generate PROJECT_REPORT_SRS.pdf...');
+  const browser = await puppeteer.launch({
+    executablePath: chromePath,
+    headless: 'new'
+  });
+  const page = await browser.newPage();
+  await page.setContent(reportHtml, { waitUntil: 'networkidle0' });
+
+  await page.pdf({
+    path: 'PROJECT_REPORT_SRS.pdf',
+    format: 'A4',
+    printBackground: true,
+    margin: { top: '0', bottom: '0', left: '0', right: '0' }
+  });
+
+  await browser.close();
+  console.log('PROJECT_REPORT_SRS.pdf generated successfully!');
+}
+
+exportPdf().catch(console.error);
+

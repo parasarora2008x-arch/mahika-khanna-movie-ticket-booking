@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | CineBook - Poornima Institute of Engineering & Technology</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-dark: #172554;
+            --primary-accent: #2563eb;
+            --bg-body: #f1f5f9;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+            color: var(--text-main);
+        }
+
+        /* Top College Header */
+        .college-bar {
+            text-align: center;
+            margin-bottom: 20px;
+            max-width: 520px;
+            width: 100%;
+        }
+
+        .college-logo-card {
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 12px 18px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .college-logo-img {
+            max-width: 100%;
+            height: auto;
+            max-height: 70px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        /* Login Card */
+        .auth-container {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .auth-header {
+            padding: 24px 28px 16px 28px;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .auth-header h1 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .db-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #ecfdf5;
+            color: #047857;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1px solid #a7f3d0;
+            margin-top: 10px;
+        }
+
+        /* Tabs */
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--card-border);
+            background: #f8fafc;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            transition: all 0.2s;
+        }
+
+        .auth-tab.active {
+            color: #1e3a8a;
+            background: #ffffff;
+            border-bottom: 2px solid #2563eb;
+        }
+
+        /* Form */
+        .auth-body {
+            padding: 24px 28px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #0f172a;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 8px;
+        }
+
+        .btn-submit:hover {
+            background: #1e293b;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.99);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Demo Accounts Box */
+        .demo-box {
+            margin-top: 24px;
+            padding: 14px;
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .demo-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #475569;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .demo-chips {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .demo-chip {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 6px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .demo-chip:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+            color: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .demo-chip span {
+            display: block;
+            font-size: 10px;
+            font-weight: 400;
+            color: #64748b;
+        }
+
+        .alert-box {
+            display: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        footer {
+            margin-top: 24px;
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- College Logo Banner -->
+    <div class="college-bar">
+        <div class="college-logo-card">
+            <img src="/logo.jpg" alt="Poornima Institute of Engineering & Technology" class="college-logo-img">
+        </div>
+    </div>
+
+    <!-- Login/Register Card -->
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>🎬 CineBook Portal</h1>
+            <p>Movie Ticket Booking Management System</p>
+            <div class="db-badge">☁️ Neon Cloud PostgreSQL Connected</div>
+        </div>
+
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+            <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">New User Registration</button>
+        </div>
+
+        <div class="auth-body">
+            <div id="alertBox" class="alert-box"></div>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginUsername">Username or Email</label>
+                    <input type="text" id="loginUsername" class="form-control" placeholder="e.g. admin or paras" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                <button type="submit" id="loginBtn" class="btn-submit">Sign In to Portal</button>
+
+                <!-- Quick College Demo Accounts -->
+                <div class="demo-box">
+                    <div class="demo-title">
+                        <span>⚡ 1-Click Demo Login</span>
+                        <span style="font-size: 10px; font-weight: 400; color: #64748b;">(For Viva / Practical)</span>
+                    </div>
+                    <div class="demo-chips">
+                        <button type="button" class="demo-chip" onclick="fillDemo('admin', 'admin123')">
+                            👑 Admin
+                            <span>admin123</span>
+                        </button>
+                        <button type="button" class="demo-chip" onclick="fillDemo('paras', 'paras123')">
+                            👨‍💻 Paras
+                            <span>paras123</span>
+                        </button>
+                        <button type="button" class="demo-chip" onclick="fillDemo('student', 'student123')">
+                            🎓 Student
+                            <span>student123</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="registerForm" style="display: none;" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="regFullName">Full Name</label>
+                    <input type="text" id="regFullName" class="form-control" placeholder="e.g. Rahul Sharma" required>
+                </div>
+                <div class="form-group">
+                    <label for="regUsername">Username</label>
+                    <input type="text" id="regUsername" class="form-control" placeholder="e.g. rahul24" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">College / Personal Email</label>
+                    <input type="email" id="regEmail" class="form-control" placeholder="name@poornima.org" required>
+                </div>
+                <div class="form-group">
+                    <label for="regMobile">Mobile Number</label>
+                    <input type="tel" id="regMobile" class="form-control" placeholder="10-digit mobile" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Create Password</label>
+                    <input type="password" id="regPassword" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" id="regBtn" class="btn-submit">Create Account in Neon DB</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Download Project Report Buttons -->
+    <div style="display: flex; justify-content: center; gap: 12px; margin-top: 20px; flex-wrap: wrap;">
+        <a href="/api/download?type=docx" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #1e40af; font-weight: 700; text-decoration: none; padding: 10px 20px; background: #eff6ff; border-radius: 8px; border: 1.5px solid #93c5fd; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s;">
+            📥 Download SRS Report (.DOCX)
+        </a>
+        <a href="/api/download?type=pdf" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #0f172a; font-weight: 700; text-decoration: none; padding: 10px 20px; background: #f8fafc; border-radius: 8px; border: 1.5px solid #cbd5e1; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s;">
+            📄 View / Download (.PDF)
+        </a>
+    </div>
+
+    <footer>
+        <p>Poornima Institute of Engineering & Technology | Department of CSE</p>
+        <p style="margin-top: 4px; color: #94a3b8;">Academic DBMS Mini-Project | Powered by Vercel & Neon PostgreSQL</p>
+    </footer>
+
+    <script>
+        // If already logged in, redirect to main portal
+        const existingUser = localStorage.getItem("cinebook_user");
+        if (existingUser) {
+            try {
+                const u = JSON.parse(existingUser);
+                if (u && u.username) {
+                    window.location.href = "/";
+                }
+            } catch (e) {}
+        }
+
+        function showAlert(msg, isError = true) {
+            const box = document.getElementById('alertBox');
+            box.className = 'alert-box ' + (isError ? 'alert-error' : 'alert-success');
+            box.innerText = msg;
+            box.style.display = 'block';
+        }
+
+        function clearAlert() {
+            const box = document.getElementById('alertBox');
+            box.style.display = 'none';
+        }
+
+        function switchTab(tab) {
+            clearAlert();
+            const tabLogin = document.getElementById('tabLogin');
+            const tabRegister = document.getElementById('tabRegister');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            if (tab === 'login') {
+                tabLogin.classList.add('active');
+                tabRegister.classList.remove('active');
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                tabRegister.classList.add('active');
+                tabLogin.classList.remove('active');
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+
+        function fillDemo(username, password) {
+            document.getElementById('loginUsername').value = username;
+            document.getElementById('loginPassword').value = password;
+            clearAlert();
+            // Automatically submit for seamless teacher demo
+            handleLogin(new Event('submit'));
+        }
+
+        async function handleLogin(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            clearAlert();
+
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const btn = document.getElementById('loginBtn');
+
+            if (!username || !password) {
+                showAlert('Please fill in both username and password.');
+                return;
+            }
+
+            try {
+                btn.disabled = true;
+                btn.innerText = 'Verifying with Neon DB...';
+
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+                btn.disabled = false;
+                btn.innerText = 'Sign In to Portal';
+
+                if (!res.ok || !data.success) {
+                    showAlert(data.error || 'Invalid username or password.');
+                    return;
+                }
+
+                // Save logged-in session
+                localStorage.setItem("cinebook_user", JSON.stringify(data.user));
+                showAlert('Login successful! Redirecting to portal...', false);
+
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 400);
+
+            } catch (err) {
+                btn.disabled = false;
+                btn.innerText = 'Sign In to Portal';
+                showAlert('Connection error: ' + err.message);
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            clearAlert();
+
+            const fullName = document.getElementById('regFullName').value.trim();
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const mobile = document.getElementById('regMobile').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const btn = document.getElementById('regBtn');
+
+            try {
+                btn.disabled = true;
+                btn.innerText = 'Registering in Neon DB...';
+
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        fullName,
+                        username,
+                        email,
+                        mobile,
+                        password,
+                        role: 'Student'
+                    })
+                });
+
+                const data = await res.json();
+                btn.disabled = false;
+                btn.innerText = 'Create Account in Neon DB';
+
+                if (!res.ok || !data.success) {
+                    showAlert(data.error || 'Failed to register account.');
+                    return;
+                }
+
+                localStorage.setItem("cinebook_user", JSON.stringify(data.user));
+                showAlert('🎉 Account created successfully in Neon DB! Redirecting...', false);
+
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 500);
+
+            } catch (err) {
+                btn.disabled = false;
+                btn.innerText = 'Create Account in Neon DB';
+                showAlert('Network error: ' + err.message);
+            }
+        }
+    </script>
+</body>
+</html>
+

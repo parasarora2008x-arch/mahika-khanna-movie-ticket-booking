@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables & secrets
+.env*
+!.env.example
+
+# Vercel & IDE
+.vercel/
+.idea/
+.vscode/
+*.iml
+.agents/
+
+# Java build output
+target/
+*.class
+*.jar
+!src/main/resources/*.jar
+
+# Operating System files
+Thumbs.db
+Desktop.ini
+.DS_Store

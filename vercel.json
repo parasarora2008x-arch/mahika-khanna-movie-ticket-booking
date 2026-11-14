@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*\\.docx)",
+      "headers": {
+        "Content-Disposition": "attachment; filename=\"PROJECT_REPORT_SRS_Mahika_Khanna_PIET25CS089.docx\"",
+        "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      },
+      "dest": "/public/$1"
+    },
+    {
+      "src": "/(.*\\.pdf)",
+      "headers": {
+        "Content-Disposition": "attachment; filename=\"PROJECT_REPORT_SRS_Mahika_Khanna_PIET25CS089.pdf\"",
+        "Content-Type": "application/pdf"
+      },
+      "dest": "/public/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ]
+}
